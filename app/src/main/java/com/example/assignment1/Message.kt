@@ -1,3 +1,3 @@
 package com.example.assignment1
 
-data class Messege(val name: String, val messege: String)
+data class Message(var name: String, var message: String)

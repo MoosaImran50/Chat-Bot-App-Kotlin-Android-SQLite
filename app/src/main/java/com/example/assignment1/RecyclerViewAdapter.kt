@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyRecyclerViewAdapter(private val carsList: List<Car>) : RecyclerView.Adapter<MyViewHolder>() {
+class MyRecyclerViewAdapter(private val messagesList: MutableList<Message>) : RecyclerView.Adapter<MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -15,20 +15,20 @@ class MyRecyclerViewAdapter(private val carsList: List<Car>) : RecyclerView.Adap
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val car = carsList[position]
-        holder.bind(car)
+        val message = messagesList[position]
+        holder.bind(message)
     }
 
     override fun getItemCount(): Int {
-        return carsList.size
+        return messagesList.size
     }
 
 }
 
 class MyViewHolder(private val view: View):RecyclerView.ViewHolder(view){
-    fun bind(car: Car){
+    fun bind(messageText: Message){
         val myTextView = view.findViewById<TextView>(R.id.tvName)
-        myTextView.text = car.name
+        myTextView.text = messageText.name + "\n\n" + messageText.message
     }
 
 }
