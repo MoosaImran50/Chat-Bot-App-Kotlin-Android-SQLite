@@ -1,31 +1,23 @@
 package com.example.assignment1
 
-import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
-    var messagesList = mutableListOf<Message>(Message("Moosa", "Honda"),
-        Message("Anonymous", "Toyota"),
-        Message("Moosa", "KIA"),
-        Message("Anonymous", "Suzuki"),
-        Message("Moosa", "Honda"),
-        Message("Anonymous", "Suzuki"),
-        Message("Moosa", "Suzuki"),
-        Message("Anonymous", "Toyota"),
-        Message("Moosa", "Toyota"),
-        Message("Anonymous Cruiser", "Toyota"),
-        Message("Moosa", "Honda"),
-        Message("Anonymous", "KIA"))
+    var messagesList = mutableListOf<Message>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         recyclerView.setBackgroundColor(Color.BLACK)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = MyRecyclerViewAdapter(messagesList)
-        recyclerView.scrollToPosition(messagesList.size - 1)
 
 
         val textBox = findViewById<EditText>(R.id.myTextBox)
@@ -52,10 +43,12 @@ class MainActivity : AppCompatActivity() {
             }
             else {
                 val message = enteredMessage
-                messagesList.add(Message("Ziyad", message))
-                messagesList.add(Message("Anas", "Fok off nigga!"))
-                recyclerView.scrollToPosition(messagesList.size - 1)
+                val sdf = SimpleDateFormat("hh:mm")
+                val currentDate = sdf.format(Date())
+                messagesList.add(Message("Me", message, currentDate))
+                messagesList.add(Message("Bot", "Hello", currentDate))
                 textBox.text.clear()
+                recyclerView.scrollToPosition(messagesList.size - 1)
             }
         }
 

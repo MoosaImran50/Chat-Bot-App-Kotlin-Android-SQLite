@@ -27,8 +27,13 @@ class MyRecyclerViewAdapter(private val messagesList: MutableList<Message>) : Re
 
 class MyViewHolder(private val view: View):RecyclerView.ViewHolder(view){
     fun bind(messageText: Message){
-        val myTextView = view.findViewById<TextView>(R.id.tvName)
-        myTextView.text = messageText.name + "\n\n" + messageText.message
+        val userName = view.findViewById<TextView>(R.id.userName)
+        val userMessage = view.findViewById<TextView>(R.id.tvName)
+        val userTimeStamp = view.findViewById<TextView>(R.id.timeStamp)
+
+        userName.text = messageText.name
+        userMessage.text = messageText.message
+        userTimeStamp.text = messageText.time_stamp
     }
 
 }
