@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = MyRecyclerViewAdapter(messagesList)
 
-
         val textBox = findViewById<EditText>(R.id.myTextBox)
         val sendButton = findViewById<Button>(R.id.mySendButton)
         var enteredMessage = ""
@@ -37,16 +36,16 @@ class MainActivity : AppCompatActivity() {
             if (enteredMessage == "") {
                 Toast.makeText(
                     this@MainActivity,
-                    "Name field can not be left blank!",
+                    "Text field can not be left blank!",
                     Toast.LENGTH_SHORT
                 ).show()
             }
             else {
                 val message = enteredMessage
-                val sdf = SimpleDateFormat("hh:mm")
-                val currentDate = sdf.format(Date())
-                messagesList.add(Message("Me", message, currentDate))
-                messagesList.add(Message("Bot", "Hello", currentDate))
+                val timeFormat = SimpleDateFormat("h:mm a")
+                val currentTime = timeFormat.format(Date())
+                messagesList.add(Message("Me", message, currentTime))
+                messagesList.add(Message("Bot", "Hello", currentTime))
                 textBox.text.clear()
                 recyclerView.scrollToPosition(messagesList.size - 1)
             }
