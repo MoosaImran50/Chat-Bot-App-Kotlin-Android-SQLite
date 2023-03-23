@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         val sendButton = findViewById<Button>(R.id.mySendButton)
         var enteredMessage = ""
         sendButton.setOnClickListener {
-            enteredMessage = textBox.text.toString()
+            enteredMessage = textBox.text.toString().trim()
             if (enteredMessage == "") {
                 Toast.makeText(
                     this@MainActivity,
