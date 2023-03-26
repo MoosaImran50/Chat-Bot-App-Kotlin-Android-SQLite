@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyRecyclerViewAdapter(private val messagesList: MutableList<Message>) : RecyclerView.Adapter<MyViewHolder>() {
+class MyMessageRecyclerViewAdapter(private val messagesList: MutableList<Message>) : RecyclerView.Adapter<MyViewHolder1>() {
 
     companion object {
         private const val LEFT_MESSAGE = 1
@@ -23,7 +23,7 @@ class MyRecyclerViewAdapter(private val messagesList: MutableList<Message>) : Re
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder1 {
         val layoutInflater = LayoutInflater.from(parent.context)
         val listItem: View
         if (viewType == LEFT_MESSAGE){
@@ -32,10 +32,10 @@ class MyRecyclerViewAdapter(private val messagesList: MutableList<Message>) : Re
         else {
             listItem = layoutInflater.inflate(R.layout.right_list_item, parent, false)
         }
-        return  MyViewHolder(listItem)
+        return  MyViewHolder1(listItem)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder1, position: Int) {
         val message = messagesList[position]
         if (message.name == "Me"){
             holder.bindRight(message)
@@ -51,7 +51,7 @@ class MyRecyclerViewAdapter(private val messagesList: MutableList<Message>) : Re
 
 }
 
-class MyViewHolder(private val view: View):RecyclerView.ViewHolder(view){
+class MyViewHolder1(private val view: View):RecyclerView.ViewHolder(view){
     fun bindLeft(messageText: Message){
         val userName = view.findViewById<TextView>(R.id.tvUserNameLeft)
         val userMessage = view.findViewById<TextView>(R.id.tvMessageLeft)

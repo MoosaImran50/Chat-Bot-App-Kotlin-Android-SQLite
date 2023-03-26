@@ -22,12 +22,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val db =  DatabaseHelper(this)
-        var messagesList = db.readData()
+        var messagesList = db.readMessage()
 
         val recyclerView = findViewById<RecyclerView>(R.id.myRecyclerView)
         recyclerView.setBackgroundColor(Color.BLACK)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = MyRecyclerViewAdapter(messagesList)
+        recyclerView.adapter = MyMessageRecyclerViewAdapter(messagesList)
 
         val textBox = findViewById<EditText>(R.id.myTextBox)
         val sendButton = findViewById<Button>(R.id.mySendButton)
@@ -55,8 +55,8 @@ class MainActivity : AppCompatActivity() {
                 textBox.text.clear()
                 recyclerView.scrollToPosition(messagesList.size - 1)
 
-                db.addData(Message("Me", message, currentTime))
-                db.addData(Message("Bot", "Hello", currentTime))
+                db.addMessage(Message("Me", message, currentTime))
+                db.addMessage(Message("Bot", "Hello", currentTime))
             }
         }
 
