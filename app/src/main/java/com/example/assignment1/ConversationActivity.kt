@@ -2,10 +2,6 @@ package com.example.assignment1
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.view.MotionEvent
-import android.view.View
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -16,13 +12,20 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() {
+class ConversationActivity : AppCompatActivity() {
+
+    private val response = mutableListOf<String>("hello", "Hey", "Hi", "How may I help you?", "OK", "Great", "Got it!", "Hmm", "Affirmative", "Sure")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.conversation_main)
+
+        val contactID = intent.getIntExtra("ID", 0)
+        val contactName = intent.getStringExtra("NAME")
+        getSupportActionBar()?.setTitle(contactName)
 
         val db =  DatabaseHelper(this)
-        var messagesList = db.readMessage()
+        val messagesList = db.readMessage(contactID)
 
         val recyclerView = findViewById<RecyclerView>(R.id.myRecyclerView)
         recyclerView.setBackgroundColor(Color.BLACK)
@@ -39,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             enteredMessage = textBox.text.toString().trim()
             if (enteredMessage == "") {
                 Toast.makeText(
-                    this@MainActivity,
+                    this@ConversationActivity,
                     "Text field can not be left blank!",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -49,14 +52,17 @@ class MainActivity : AppCompatActivity() {
                 val timeFormat = SimpleDateFormat("h:mm a")
                 val currentTime = timeFormat.format(Date())
 
-                messagesList.add(Message("Me", message, currentTime))
-                messagesList.add(Message("Bot", "Hello", currentTime))
+                val random = (0..9).random()
+                val randomResponse = response[random]
+
+                messagesList.add(Message(contactID, "Me", message, currentTime))
+                messagesList.add(Message(contactID, contactName!!, randomResponse, currentTime))
 
                 textBox.text.clear()
                 recyclerView.scrollToPosition(messagesList.size - 1)
 
-                db.addMessage(Message("Me", message, currentTime))
-                db.addMessage(Message("Bot", "Hello", currentTime))
+                db.addMessage(Message(contactID, "Me", message, currentTime))
+                db.addMessage(Message(contactID, contactName, randomResponse, currentTime))
             }
         }
 

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#C2E1D3"
-    tools:context=".MainActivity">
+    android:background="#9DE8C5"
+    tools:context=".ConversationActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ContactsRecyclerView"
@@ -25,7 +25,10 @@
         android:id="@+id/myContactTextBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Add New Contact"
+        android:hint="Contact Name"
+        android:maxLines="1"
+        android:textColor="#000000"
+        android:textColorHint="#575757"
         app:layout_constraintEnd_toStartOf="@+id/addButton"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +47,9 @@
         android:id="@+id/addContact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:text="Add New Contact"
+        android:textColor="#515151"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,8 +59,10 @@
         android:id="@+id/contacts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
         android:text="Contacts"
+        android:textColor="#FF515151"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,32 +1,25 @@
 package com.example.assignment1
 
-import android.graphics.Color
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.assignment1.databinding.ActivityMain1Binding
-import java.text.SimpleDateFormat
-import java.util.*
 
-class MainActivity1 : AppCompatActivity() {
-private lateinit var binding: ActivityMain1Binding
+class ContactActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main1)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        setContentView(R.layout.contact_main)
 
         val db =  DatabaseHelper(this)
-        var contactsList = db.readContact()
+        val contactsList = db.readContact()
 
         val recyclerView = findViewById<RecyclerView>(R.id.ContactsRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -36,11 +29,10 @@ private lateinit var binding: ActivityMain1Binding
 
         adapter.setOnItemClickListener(object: MyContactRecyclerViewAdapter.OnItemClickListener{
             override fun onItemClick(position: Int) {
-                Toast.makeText(
-                    this@MainActivity1,
-                    contactsList[position].name,
-                    Toast.LENGTH_SHORT
-                ).show()
+                val intent = Intent(this@ContactActivity, ConversationActivity::class.java)
+                intent.putExtra("ID", contactsList[position].contact_id)
+                intent.putExtra("NAME", contactsList[position].name)
+                startActivity(intent)
             }
         })
 
@@ -56,7 +48,7 @@ private lateinit var binding: ActivityMain1Binding
             enteredName = textBox.text.toString().trim()
             if (enteredName == "") {
                 Toast.makeText(
-                    this@MainActivity1,
+                    this@ContactActivity,
                     "Text field can not be left blank!",
                     Toast.LENGTH_SHORT
                 ).show()

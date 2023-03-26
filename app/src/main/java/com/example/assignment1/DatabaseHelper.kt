@@ -4,9 +4,6 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import android.widget.Toast
-import java.util.jar.Attributes.Name
-import kotlin.coroutines.coroutineContext
 
 private const val DATABASE_NAME = "ChatAPP"
 private const val TABLE_NAME1 = "Message"
@@ -16,12 +13,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     override fun onCreate(db: SQLiteDatabase?) {
         val sql1 = "CREATE TABLE " + TABLE_NAME1 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                  "Name TEXT," +
+                  "Contact_ID INTEGER," +
+                  "Contact_Name TEXT," +
                   "Content TEXT," +
                   "CreationDateTime TEXT)"
         db?.execSQL(sql1)
 
-        val sql2 = "CREATE TABLE " + TABLE_NAME2 + " (Contact_ID INTEGER PRIMARY KEY, " +
+        val sql2 = "CREATE TABLE " + TABLE_NAME2 + " (ID INTEGER PRIMARY KEY, " +
                    "Name TEXT)"
         db?.execSQL(sql2)
     }
@@ -33,11 +31,12 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     fun addMessage(msg: Message) {
         val db = this.writableDatabase
-        var cv = ContentValues()
-        cv.put("Name", msg.name)
+        val cv = ContentValues()
+        cv.put("Contact_ID", msg.contact_id)
+        cv.put("Contact_Name", msg.name)
         cv.put("Content", msg.message)
         cv.put("CreationDateTime", msg.time_stamp)
-        var result = db.insert(TABLE_NAME1, null, cv)
+        val result = db.insert(TABLE_NAME1, null, cv)
         if (result == -1.toLong()){
             Log.d("DatabaseHelper", "Failed")
         }
@@ -46,17 +45,18 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         }
     }
 
-    fun readMessage() : MutableList<Message> {
-        var messagesList = mutableListOf<Message>()
+    fun readMessage(id: Int) : MutableList<Message> {
+        val messagesList = mutableListOf<Message>()
 
         val db = this.readableDatabase
-        val sql = "Select * from $TABLE_NAME1"
+        val sql = "Select m.Contact_ID, m.Contact_Name, m.Content, m.CreationDateTime from $TABLE_NAME1 as m join $TABLE_NAME2 as c on c.ID = m.Contact_ID where m.Contact_ID = $id"
         val result = db.rawQuery(sql, null)
         while (result.moveToNext()){
-            var name = result.getString(1)
-            var message = result.getString(2)
-            var time = result.getString(3)
-            messagesList.add(Message(name, message, time))
+            val contactID = result.getString(0).toInt()
+            val name = result.getString(1)
+            val message = result.getString(2)
+            val timeStamp = result.getString(3)
+            messagesList.add(Message(contactID, name, message, timeStamp))
         }
         result.close()
         db.close()
@@ -64,15 +64,30 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return messagesList
     }
 
-    fun readContact() : MutableList<Contact> {
-        var contactList = mutableListOf<Contact>()
+    fun addContact(contact: Contact) {
+        val db = this.writableDatabase
+        val cv = ContentValues()
+        cv.put("ID", contact.contact_id)
+        cv.put("Name", contact.name)
+        val result = db.insert(TABLE_NAME2, null, cv)
+        if (result == -1.toLong()){
+            Log.d("DatabaseHelper", "Failed")
+        }
+        else{
+            Log.d("DatabaseHelper", "Success")
+        }
+    }
 
+    fun readContact() : MutableList<Contact> {
+        val contactList = mutableListOf<Contact>()
         val db = this.readableDatabase
         val sql = "Select * from $TABLE_NAME2"
         val result = db.rawQuery(sql, null)
+
         while (result.moveToNext()){
-            var id = result.getString(1).toInt()
-            var name = result.getString(2)
+            val id = result.getString(0).toInt()
+            val name = result.getString(1)
+
             contactList.add(Contact(id, name))
         }
         result.close()
@@ -81,17 +96,4 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return contactList
     }
 
-    fun addContact(contact: Contact) {
-        val db = this.writableDatabase
-        var cv = ContentValues()
-        cv.put("Contact_ID", contact.contact_id)
-        cv.put("Name", contact.name)
-        var result = db.insert(TABLE_NAME2, null, cv)
-        if (result == -1.toLong()){
-            Log.d("DatabaseHelper", "Failed")
-        }
-        else{
-            Log.d("DatabaseHelper", "Success")
-        }
-    }
 }
