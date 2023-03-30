@@ -10,12 +10,16 @@ import androidx.recyclerview.widget.RecyclerView
 
 class MyContactRecyclerViewAdapter(private val contactsList: MutableList<Contact>) : RecyclerView.Adapter<MyContactRecyclerViewAdapter.MyViewHolder2>() {
 
+    // creating OnItemClickListener class object
     private lateinit var mListener: OnItemClickListener
 
+    // on OnItemClickListener class interface
     interface OnItemClickListener {
+        // onItemClick function that will be override from ContactActivity
         fun onItemClick(position: Int)
     }
 
+    // function that will be called to override onItemClick function of OnItemClickListener interface
     fun setOnItemClickListener(listener: OnItemClickListener) {
         mListener = listener
     }
@@ -39,6 +43,7 @@ class MyContactRecyclerViewAdapter(private val contactsList: MutableList<Contact
 
 
     class MyViewHolder2(private val view: View, listener: OnItemClickListener): RecyclerView.ViewHolder(view){
+        // setting onclick listener for the particular view
         init{
             view.setOnClickListener {
                 listener.onItemClick(adapterPosition)

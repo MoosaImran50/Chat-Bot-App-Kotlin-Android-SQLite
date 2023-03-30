@@ -11,6 +11,7 @@ private const val TABLE_NAME2 = "Conversation"
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1){
 
+    // creating database when application is launched for the first time
     override fun onCreate(db: SQLiteDatabase?) {
         val sql1 = "CREATE TABLE " + TABLE_NAME1 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                   "Contact_ID INTEGER," +
@@ -29,6 +30,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         onCreate(db)
     }
 
+    // inserting message into database
     fun addMessage(msg: Message) {
         val db = this.writableDatabase
         val cv = ContentValues()
@@ -45,6 +47,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         }
     }
 
+    // reading message from database
     fun readMessage(id: Int) : MutableList<Message> {
         val messagesList = mutableListOf<Message>()
 
@@ -64,6 +67,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return messagesList
     }
 
+    // inserting contact into database
     fun addContact(contact: Contact) {
         val db = this.writableDatabase
         val cv = ContentValues()
@@ -78,6 +82,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         }
     }
 
+    // reading contact from database
     fun readContact() : MutableList<Contact> {
         val contactList = mutableListOf<Contact>()
         val db = this.readableDatabase

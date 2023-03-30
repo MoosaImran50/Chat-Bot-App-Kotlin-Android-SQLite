@@ -18,15 +18,18 @@ class ContactActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.contact_main)
 
+        // reading from database
         val db =  DatabaseHelper(this)
         val contactsList = db.readContact()
 
+        // setting up RecyclerView
         val recyclerView = findViewById<RecyclerView>(R.id.ContactsRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
         val adapter = MyContactRecyclerViewAdapter(contactsList)
         recyclerView.adapter = adapter
 
+        // overriding RecyclerView item onclick listener function to launch conversation activity
         adapter.setOnItemClickListener(object: MyContactRecyclerViewAdapter.OnItemClickListener{
             override fun onItemClick(position: Int) {
                 val intent = Intent(this@ContactActivity, ConversationActivity::class.java)
@@ -44,6 +47,7 @@ class ContactActivity : AppCompatActivity() {
 
         recyclerView.scrollToPosition(contactsList.size - 1)
 
+        // onclick listener for adding contact button
         addButton.setOnClickListener {
             enteredName = textBox.text.toString().trim()
             if (enteredName == "") {
@@ -62,6 +66,7 @@ class ContactActivity : AppCompatActivity() {
                 textBox.text.clear()
                 recyclerView.scrollToPosition(contactsList.size - 1)
 
+                // writing to database
                 db.addContact(Contact(id, name))
             }
 

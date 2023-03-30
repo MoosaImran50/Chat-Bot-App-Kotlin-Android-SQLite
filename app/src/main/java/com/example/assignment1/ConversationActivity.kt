@@ -14,19 +14,22 @@ import java.util.*
 
 class ConversationActivity : AppCompatActivity() {
 
-    private val response = mutableListOf<String>("hello", "Hey", "Hi", "How may I help you?", "OK", "Great", "Got it!", "Hmm", "Affirmative", "Sure")
+    private val response = mutableListOf<String>("Hello", "Hey", "Hi", "How may I help you?", "OK", "Great", "Got it!", "Hmm", "Affirmative", "Sure", "Yes")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.conversation_main)
 
+        // fetching data of the selected contact
         val contactID = intent.getIntExtra("ID", 0)
         val contactName = intent.getStringExtra("NAME")
         getSupportActionBar()?.setTitle(contactName)
 
+        // reading from database
         val db =  DatabaseHelper(this)
         val messagesList = db.readMessage(contactID)
 
+        // setting upm RecyclerView
         val recyclerView = findViewById<RecyclerView>(R.id.myRecyclerView)
         recyclerView.setBackgroundColor(Color.BLACK)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -38,6 +41,7 @@ class ConversationActivity : AppCompatActivity() {
 
         recyclerView.scrollToPosition(messagesList.size - 1)
 
+        // setting onclick listener for message sending button
         sendButton.setOnClickListener {
             enteredMessage = textBox.text.toString().trim()
             if (enteredMessage == "") {
@@ -52,7 +56,7 @@ class ConversationActivity : AppCompatActivity() {
                 val timeFormat = SimpleDateFormat("h:mm a")
                 val currentTime = timeFormat.format(Date())
 
-                val random = (0..9).random()
+                val random = (0..10).random()
                 val randomResponse = response[random]
 
                 messagesList.add(Message(contactID, "Me", message, currentTime))
@@ -61,6 +65,7 @@ class ConversationActivity : AppCompatActivity() {
                 textBox.text.clear()
                 recyclerView.scrollToPosition(messagesList.size - 1)
 
+                // writing to database
                 db.addMessage(Message(contactID, "Me", message, currentTime))
                 db.addMessage(Message(contactID, contactName, randomResponse, currentTime))
             }
