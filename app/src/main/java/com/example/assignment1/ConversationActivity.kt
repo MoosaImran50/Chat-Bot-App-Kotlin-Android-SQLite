@@ -14,6 +14,7 @@ import java.util.*
 
 class ConversationActivity : AppCompatActivity() {
 
+    private lateinit var dao: IDAO
     private val response = mutableListOf<String>("Hello", "Hey", "Hi", "How may I help you?", "OK", "Great", "Got it!", "Hmm", "Affirmative", "Sure", "Yes")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,8 +27,8 @@ class ConversationActivity : AppCompatActivity() {
         getSupportActionBar()?.setTitle(contactName)
 
         // reading from database
-        val db =  DatabaseHelper(this)
-        val messagesList = db.readMessage(contactID)
+        dao = dbDAO(this)
+        val messagesList = dao.readMessage(contactID)
 
         // setting upm RecyclerView
         val recyclerView = findViewById<RecyclerView>(R.id.myRecyclerView)
@@ -66,8 +67,8 @@ class ConversationActivity : AppCompatActivity() {
                 recyclerView.scrollToPosition(messagesList.size - 1)
 
                 // writing to database
-                db.addMessage(Message(contactID, "Me", message, currentTime))
-                db.addMessage(Message(contactID, contactName, randomResponse, currentTime))
+                dao.addMessage(Message(contactID, "Me", message, currentTime))
+                dao.addMessage(Message(contactID, contactName, randomResponse, currentTime))
             }
         }
 

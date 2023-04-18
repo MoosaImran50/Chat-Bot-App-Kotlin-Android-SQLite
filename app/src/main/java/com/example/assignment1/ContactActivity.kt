@@ -13,14 +13,16 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ContactActivity : AppCompatActivity() {
 
+    private lateinit var dao: IDAO
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.contact_main)
 
         // reading from database
-        val db =  DatabaseHelper(this)
-        val contactsList = db.readContact()
+        dao = dbDAO(this)
+        val contactsList = dao.readContact()
 
         // setting up RecyclerView
         val recyclerView = findViewById<RecyclerView>(R.id.ContactsRecyclerView)
@@ -67,7 +69,7 @@ class ContactActivity : AppCompatActivity() {
                 recyclerView.scrollToPosition(contactsList.size - 1)
 
                 // writing to database
-                db.addContact(Contact(id, name))
+                dao.addContact(Contact(id, name))
             }
 
         }
